@@ -4,14 +4,15 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.raif.quizbot.config.BotConfig;
 
 public class MyAmazingBot extends TelegramLongPollingBot {
     private String username;
     private String token;
 
-    public MyAmazingBot(Config config) {
-        this.username = config.username();
-        this.token = config.token();
+    public MyAmazingBot(BotConfig config) {
+        this.username = config.getUsername();
+        this.token = config.getToken();
     }
 
     @Override

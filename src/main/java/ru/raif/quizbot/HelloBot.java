@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.raif.quizbot.config.BotConfig;
 
 import java.util.function.Predicate;
 
@@ -20,9 +22,14 @@ public class HelloBot extends AbilityBot {
 
     private Integer creatorId;
 
-    public HelloBot(Config config) {
-        super(config.token(), config.username());
-        this.creatorId = config.creatorId();
+    public HelloBot(BotConfig config) {
+        super(config.getToken(), config.getUsername());
+        this.creatorId = config.getCreatorId();
+    }
+
+    public HelloBot(BotConfig config, DefaultBotOptions botOptions) {
+        super(config.getToken(), config.getUsername(), botOptions);
+        this.creatorId = config.getCreatorId();
     }
 
     @Override
@@ -88,7 +95,6 @@ public class HelloBot extends AbilityBot {
     private Predicate<Update> isReplyToBot() {
         return upd -> upd.getMessage().getReplyToMessage().getFrom().getUserName().equalsIgnoreCase(getBotUsername());
     }
-
 
 
 }

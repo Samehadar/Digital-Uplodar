@@ -1,10 +1,19 @@
 package ru.raif.quizbot;
 
+import com.typesafe.config.ConfigBeanFactory;
+import com.typesafe.config.ConfigFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.raif.quizbot.config.BotConfig;
+import ru.raif.quizbot.config.ProxyConfig;
+
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 
 public class Main {
 
@@ -12,13 +21,20 @@ public class Main {
 
     public static void main(String[] args) {
         log.info("Starting Telegram API bot");
-        Config config = config(args);
+        BotConfig config = ConfigBeanFactory.create(ConfigFactory.load("bot.conf").getConfig("bot"), BotConfig.class);
 
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
-//        var bot = new MyAmazingBot(username, botToken);
-        var bot = new HelloBot(config);
+        HelloBot bot;
+        //ffs it doesnt work through Optional.map flow... I gave up and wrote through IF ELSE
+        if (config.getProxy() != null) {
+            DefaultBotOptions dbo = generateBotOptionsWithProxy(config.getProxy());
+            bot = new HelloBot(config, dbo);
+        } else {
+            bot = new HelloBot(config);
+        }
+
 
         try {
             botsApi.registerBot(bot);
@@ -27,12 +43,27 @@ public class Main {
         }
     }
 
-    private static Config config(String[] args) {
-        try {
-            return new Config(args[0], args[1], args[2].transform(Integer::parseInt));
-        } catch (Exception e) {
-            log.error("Cant start application with received args!", e);
-            throw new RuntimeException("Required args are {username, token, creatorId}", e);
+    private static DefaultBotOptions generateBotOptionsWithProxy(ProxyConfig config) {
+
+        if (config.getUsername() != null && !config.getUsername().isBlank() && config.getPassword() != null) {
+            // Create the Authenticator that will return auth's parameters for proxy authentication
+            Authenticator.setDefault(new Authenticator() {
+
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(config.getUsername(), config.getPassword().toCharArray());
+                }
+            });
         }
+
+        // Set up Http proxy
+        DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
+
+        botOptions.setProxyHost(config.getHost());
+        botOptions.setProxyPort(config.getPort());
+        // Select proxy type: [HTTP|SOCKS4|SOCKS5] (default: NO_PROXY)
+        botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
+
+        return botOptions;
     }
 }
