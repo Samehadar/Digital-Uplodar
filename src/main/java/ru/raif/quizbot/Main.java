@@ -8,13 +8,13 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Starting Telegram API bot");
+        Config config = config(args);
+
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
-        var username = args[0];
-        var botToken = args[1];
-
-        var bot = new MyAmazingBot(username, botToken);
+//        var bot = new MyAmazingBot(username, botToken);
+        var bot = new HelloBot(config);
 
         try {
             botsApi.registerBot(bot);
@@ -23,4 +23,13 @@ public class Main {
         }
     }
 
+    private static Config config(String[] args) {
+        try {
+            return new Config(args[0], args[1], args[2].transform(Integer::parseInt));
+        } catch (Exception e) {
+            System.out.println("Cant start application with received args!");
+            e.printStackTrace();
+            throw new RuntimeException("Required args are {username, token, creatorId}");
+        }
+    }
 }

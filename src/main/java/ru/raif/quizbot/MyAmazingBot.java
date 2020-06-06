@@ -9,9 +9,9 @@ public class MyAmazingBot extends TelegramLongPollingBot {
     private String username;
     private String token;
 
-    public MyAmazingBot(String username, String botToken) {
-        this.username = username;
-        this.token = botToken;
+    public MyAmazingBot(Config config) {
+        this.username = config.username();
+        this.token = config.token();
     }
 
     @Override
