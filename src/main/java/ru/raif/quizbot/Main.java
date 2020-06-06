@@ -22,10 +22,12 @@ public class Main {
 
     public static void main(String[] args) {
         log.info(AsciiArt.makeLogotype());
-        log.info("Starting Telegram API bot");
+        log.info("QuizBot is starting...");
 
+        log.info("Loading server configuration");
         BotConfig config = ConfigBeanFactory.create(ConfigFactory.load("bot.conf").getConfig("bot"), BotConfig.class);
-
+        log.debug(config.toString());
+        log.info("Server configuration has been loaded successfully");
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
@@ -47,8 +49,10 @@ public class Main {
     }
 
     private static DefaultBotOptions generateBotOptionsWithProxy(ProxyConfig config) {
+        log.info(String.format("QuizBot is starting using proxy %s:%s", config.getHost(), config.getPort()));
 
         if (config.getUsername() != null && !config.getUsername().isBlank() && config.getPassword() != null) {
+            log.info("Connection to proxy will be done using username and password");
             // Create the Authenticator that will return auth's parameters for proxy authentication
             Authenticator.setDefault(new Authenticator() {
 

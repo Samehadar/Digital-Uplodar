@@ -52,18 +52,7 @@ public class AsciiArt {
         return graphics2D;
     }
 
-    public static class Settings {
-        public Font font;
-        public int width;
-        public int height;
-
-        public Settings(Font font, int width, int height) {
-            this.font = font;
-            this.width = width;
-            this.height = height;
-        }
-    }
-
+    private static record Settings(Font font, int width, int height) {}
 
     public static String makeLogotype() {
         var jpoint2020 = "JPoint2020";
