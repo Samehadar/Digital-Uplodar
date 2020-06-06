@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.raif.quizbot.config.BotConfig;
 import ru.raif.quizbot.config.ProxyConfig;
+import ru.raif.quizbot.util.AsciiArt;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
@@ -20,7 +21,9 @@ public class Main {
     private final static Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+        log.info(AsciiArt.makeLogotype());
         log.info("Starting Telegram API bot");
+
         BotConfig config = ConfigBeanFactory.create(ConfigFactory.load("bot.conf").getConfig("bot"), BotConfig.class);
 
         ApiContextInitializer.init();
