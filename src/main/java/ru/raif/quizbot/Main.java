@@ -1,13 +1,17 @@
 package ru.raif.quizbot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Main {
 
+    private final static Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
-        System.out.println("Starting Telegram API bot");
+        log.info("Starting Telegram API bot");
         Config config = config(args);
 
         ApiContextInitializer.init();
@@ -19,7 +23,7 @@ public class Main {
         try {
             botsApi.registerBot(bot);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error("Something went wrong during starting Telegram Bot...", e);
         }
     }
 
@@ -27,9 +31,8 @@ public class Main {
         try {
             return new Config(args[0], args[1], args[2].transform(Integer::parseInt));
         } catch (Exception e) {
-            System.out.println("Cant start application with received args!");
-            e.printStackTrace();
-            throw new RuntimeException("Required args are {username, token, creatorId}");
+            log.error("Cant start application with received args!", e);
+            throw new RuntimeException("Required args are {username, token, creatorId}", e);
         }
     }
 }
