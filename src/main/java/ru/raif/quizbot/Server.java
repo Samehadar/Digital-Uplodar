@@ -2,8 +2,7 @@ package ru.raif.quizbot;
 
 import com.typesafe.config.ConfigBeanFactory;
 import com.typesafe.config.ConfigFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
@@ -12,14 +11,17 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.raif.quizbot.bot.QuizBot;
 import ru.raif.quizbot.config.BotConfig;
 import ru.raif.quizbot.config.ProxyConfig;
+import ru.raif.quizbot.model.Quiz;
 import ru.raif.quizbot.util.AsciiArt;
+import ru.raif.quizbot.repository.QuizRepo;
+import ru.raif.quizbot.repository.QuizRepoImpl;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.util.List;
 
+@Slf4j
 public class Server {
-
-    private final static Logger log = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) {
         log.info(AsciiArt.makeLogotype());
@@ -29,6 +31,16 @@ public class Server {
         BotConfig config = ConfigBeanFactory.create(ConfigFactory.load("bot.conf").getConfig("bot"), BotConfig.class);
         log.debug(config.toString());
         log.info("Server configuration has been loaded successfully");
+
+//        log.info("Starting quiz repository");
+//        QuizRepo quizRepo = new QuizRepoImpl();
+//        log.info("Quiz repository has been started successfully");
+//
+//        Quiz randomQuiz = quizRepo.getRandomQuiz();
+//        log.info(randomQuiz.toString());
+//        List<Quiz> quizzes = quizRepo.take(3);
+//        log.info(quizzes.toString());
+
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
