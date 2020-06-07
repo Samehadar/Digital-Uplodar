@@ -9,6 +9,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.raif.quizbot.bot.QuizBot;
 import ru.raif.quizbot.config.BotConfig;
 import ru.raif.quizbot.config.ProxyConfig;
 import ru.raif.quizbot.util.AsciiArt;
@@ -21,7 +22,7 @@ public class Server {
     private final static Logger log = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) {
-        log.info(AsciiArt.makeLogotype());
+        log.info(AsciiArt.drawLogotype());
         log.info("QuizBot is starting...");
 
         log.info("Loading server configuration");
@@ -31,13 +32,13 @@ public class Server {
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
-        HelloBot bot;
+        QuizBot bot;
         //ffs it doesnt work through Optional.map flow... I gave up and wrote through IF ELSE
         if (config.getProxy() != null) {
             DefaultBotOptions dbo = generateBotOptionsWithProxy(config.getProxy());
-            bot = new HelloBot(config, dbo);
+            bot = new QuizBot(config, dbo);
         } else {
-            bot = new HelloBot(config);
+            bot = new QuizBot(config);
         }
 
 

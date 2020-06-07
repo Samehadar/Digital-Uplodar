@@ -1,4 +1,4 @@
-package ru.raif.quizbot.util;
+package ru.raif.quizbot.repository;
 
 import ru.raif.quizbot.model.Answer;
 import ru.raif.quizbot.model.Quiz;

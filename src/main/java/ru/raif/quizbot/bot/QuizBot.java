@@ -1,14 +1,19 @@
-package ru.raif.quizbot;
+package ru.raif.quizbot.bot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.abilitybots.api.objects.Reply;
+import org.telegram.abilitybots.api.objects.ReplyFlow;
+import org.telegram.abilitybots.api.util.AbilityUtils;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.raif.quizbot.config.BotConfig;
 
+import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static org.telegram.abilitybots.api.objects.Flag.MESSAGE;
@@ -16,18 +21,18 @@ import static org.telegram.abilitybots.api.objects.Flag.REPLY;
 import static org.telegram.abilitybots.api.objects.Locality.ALL;
 import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
-public class HelloBot extends AbilityBot {
+public class QuizBot extends AbilityBot {
 
-    private final static Logger log = LoggerFactory.getLogger(HelloBot.class);
+    private final static Logger log = LoggerFactory.getLogger(QuizBot.class);
 
     private Integer creatorId;
 
-    public HelloBot(BotConfig config) {
+    public QuizBot(BotConfig config) {
         super(config.getToken(), config.getUsername());
         this.creatorId = config.getCreatorId();
     }
 
-    public HelloBot(BotConfig config, DefaultBotOptions botOptions) {
+    public QuizBot(BotConfig config, DefaultBotOptions botOptions) {
         super(config.getToken(), config.getUsername(), botOptions);
         this.creatorId = config.getCreatorId();
     }
@@ -35,6 +40,23 @@ public class HelloBot extends AbilityBot {
     @Override
     public int creatorId() {
         return creatorId;
+    }
+
+    public Reply ignoreAnyoneExceptCreator() {
+        Consumer<Update> action = upd -> silent.send("The bot is under construction... Try again later.", AbilityUtils.getChatId(upd));
+
+        return Reply.of(action, x -> !Objects.equals(x.getMessage().getFrom().getId(), creatorId));
+    }
+
+    public Ability pingPong() {
+        return Ability
+                .builder()
+                .name("ping")
+                .info("ping pong")
+                .locality(ALL)
+                .privacy(PUBLIC)
+                .action(ctx -> silent.send("pong", ctx.chatId()))
+                .build();
     }
 
     public Ability sayHelloWorld() {
@@ -96,5 +118,38 @@ public class HelloBot extends AbilityBot {
         return upd -> upd.getMessage().getReplyToMessage().getFrom().getUserName().equalsIgnoreCase(getBotUsername());
     }
 
+    private Predicate<Update> hasMessageWith(String msg) {
+        return upd -> upd.getMessage().getText().equalsIgnoreCase(msg);
+    }
+
+    public Reply moves() {
+        Reply saidLeft = Reply.of(upd -> silent.send("Sir, I have gone left.", AbilityUtils.getChatId(upd)),
+                hasMessageWith("go left or else"));
+
+        ReplyFlow leftflow = ReplyFlow.builder(db)
+                .action(upd -> silent.send("I don't know how to go left.", AbilityUtils.getChatId(upd)))
+                .onlyIf(hasMessageWith("left"))
+                .next(saidLeft)
+                .build();
+
+        Reply saidRight = Reply.of(upd -> silent.send("Sir, I have gone right.", AbilityUtils.getChatId(upd)),
+                hasMessageWith("right"));
+
+        ReplyFlow wake_up = ReplyFlow.builder(db)
+                // Just like replies, a ReplyFlow can take an action, here we want to send a
+                // statement to prompt the user for directions!
+                .action(upd -> silent.send("Command me to go left or right!", AbilityUtils.getChatId(upd)))
+                // We should only trigger this flow when the user says "wake up"
+                .onlyIf(hasMessageWith("wake up"))
+                // The next method takes in an object of type Reply.
+                // Here we chain our replies together
+                .next(leftflow)
+                // We chain one more reply, which is when the user commands your bot to go right
+                .next(saidRight)
+                // Finally, we build our ReplyFlow
+                .build();
+
+        return wake_up;
+    }
 
 }

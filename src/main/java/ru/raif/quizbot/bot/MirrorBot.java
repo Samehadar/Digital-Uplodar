@@ -1,4 +1,4 @@
-package ru.raif.quizbot;
+package ru.raif.quizbot.bot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -6,11 +6,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.raif.quizbot.config.BotConfig;
 
-public class MyAmazingBot extends TelegramLongPollingBot {
+public class MirrorBot extends TelegramLongPollingBot {
     private String username;
     private String token;
 
-    public MyAmazingBot(BotConfig config) {
+    public MirrorBot(BotConfig config) {
         this.username = config.getUsername();
         this.token = config.getToken();
     }
