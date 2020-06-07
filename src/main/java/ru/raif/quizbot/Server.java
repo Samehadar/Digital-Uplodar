@@ -16,9 +16,9 @@ import ru.raif.quizbot.util.AsciiArt;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
-public class Main {
+public class Server {
 
-    private final static Logger log = LoggerFactory.getLogger(Main.class);
+    private final static Logger log = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) {
         log.info(AsciiArt.makeLogotype());

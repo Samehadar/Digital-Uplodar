@@ -86,7 +86,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        ru.raif.quizbot.Main
+                                        ru.raif.quizbot.Server
                                     </mainClass>
                                 </manifest>
                             </archive>
