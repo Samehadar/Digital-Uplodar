@@ -18,7 +18,7 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 public class HelloBot extends AbilityBot {
 
-    private final static Logger log = LoggerFactory.getLogger(Main.class);
+    private final static Logger log = LoggerFactory.getLogger(HelloBot.class);
 
     private Integer creatorId;
 
