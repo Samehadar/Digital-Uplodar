@@ -22,7 +22,7 @@ public class Server {
     private final static Logger log = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args) {
-        log.info(AsciiArt.drawLogotype());
+        log.info(AsciiArt.makeLogotype());
         log.info("QuizBot is starting...");
 
         log.info("Loading server configuration");
