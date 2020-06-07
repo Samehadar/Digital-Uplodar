@@ -32,9 +32,9 @@ public class Server {
         log.debug(config.toString());
         log.info("Server configuration has been loaded successfully");
 
-//        log.info("Starting quiz repository");
-//        QuizRepo quizRepo = new QuizRepoImpl();
-//        log.info("Quiz repository has been started successfully");
+        log.info("Starting quiz repository");
+        QuizRepo quizRepo = new QuizRepoImpl();
+        log.info("Quiz repository has been started successfully");
 //
 //        Quiz randomQuiz = quizRepo.getRandomQuiz();
 //        log.info(randomQuiz.toString());
@@ -48,9 +48,9 @@ public class Server {
         //ffs it doesnt work through Optional.map flow... I gave up and wrote through IF ELSE
         if (config.getProxy() != null) {
             DefaultBotOptions dbo = generateBotOptionsWithProxy(config.getProxy());
-            bot = new QuizBot(config, dbo);
+            bot = new QuizBot(config, quizRepo, dbo);
         } else {
-            bot = new QuizBot(config);
+            bot = new QuizBot(config, quizRepo);
         }
 
 

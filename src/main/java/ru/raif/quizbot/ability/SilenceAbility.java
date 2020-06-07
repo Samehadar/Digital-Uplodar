@@ -22,7 +22,10 @@ public class SilenceAbility implements AbilityExtension {
     private final Supplier<Integer> getCreatorId;
 
     public Reply ignoreAnyoneExceptCreator() {
-        Consumer<Update> action = upd -> silent.send("The bot is under construction... Try again later.", AbilityUtils.getChatId(upd));
+        Consumer<Update> action = upd -> silent.send(
+                "The bot is under construction... Try again later.",
+                AbilityUtils.getChatId(upd)
+        );
 
         return Reply.of(action, x -> !Objects.equals(x.getMessage().getFrom().getId(), getCreatorId.get()));
     }

@@ -11,6 +11,8 @@ import ru.raif.quizbot.ability.LeftRightAbility;
 import ru.raif.quizbot.ability.PingPongAbility;
 import ru.raif.quizbot.ability.SilenceAbility;
 import ru.raif.quizbot.config.BotConfig;
+import ru.raif.quizbot.repository.QuizRepo;
+import ru.raif.quizbot.util.QuizSender;
 
 import java.util.function.Predicate;
 
@@ -23,20 +25,41 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 public class QuizBot extends AbilityBot {
 
     private Integer creatorId;
+    private QuizSender quizSender;
+    private QuizRepo quizRepo;
 
-    public QuizBot(BotConfig config) {
+    public QuizBot(BotConfig config, QuizRepo quizRepo) {
         super(config.getToken(), config.getUsername());
         this.creatorId = config.getCreatorId();
+        this.quizSender = new QuizSender(sender);
+        this.quizRepo = quizRepo;
     }
 
-    public QuizBot(BotConfig config, DefaultBotOptions botOptions) {
+    public QuizBot(BotConfig config, QuizRepo quizRepo, DefaultBotOptions botOptions) {
         super(config.getToken(), config.getUsername(), botOptions);
         this.creatorId = config.getCreatorId();
+        this.quizSender = new QuizSender(sender);
+        this.quizRepo = quizRepo;
     }
 
     @Override
     public int creatorId() {
         return creatorId;
+    }
+
+    public Ability sendQuiz() {
+        return Ability.builder()
+                .name("quiz")
+                .info("Return random quiz")
+                .locality(ALL)
+                .privacy(PUBLIC)
+                .action(ctx -> quizSender.sendQuiz(quizRepo.getRandomQuiz(), ctx.chatId()))
+//                .reply(update -> {
+//                    log.info("Received reply from the user: " + AbilityUtils.fullName(AbilityUtils.getUser(update)));
+//                    update.getCallbackQuery();
+//                    silent.send("I don't know the correct answer, I'm sorry :(", AbilityUtils.getChatId(update));
+//                }, MESSAGE, )
+                .build();
     }
 
     public AbilityExtension ignoreAnyoneExceptCreator() {
