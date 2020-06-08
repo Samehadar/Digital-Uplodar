@@ -4,12 +4,13 @@ import io.vavr.collection.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.abilitybots.api.sender.MessageSender;
-import org.telegram.abilitybots.api.sender.SilentSender;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
@@ -24,17 +25,32 @@ public record QuizSender(MessageSender sender) {
     private static final Logger log = LoggerFactory.getLogger(QuizSender.class);
 
     public Optional<Message> sendQuiz(Quiz quiz, long id) {
+        SendMessage msg = new SendMessage();
+        msg.setChatId(id);
+        msg.setText(quiz.question());
+        msg.enableMarkdown(true);
+        msg.setReplyMarkup(getQuizMarkup(quiz));
+
+        return execute(msg);
+    }
+
+    //todo:: move to separate module/class
+    public ReplyKeyboard getQuizMarkup(Quiz quiz) {
         KeyboardRow keyboardButtons = new KeyboardRow();
         Stream.ofAll(quiz.answers())
                 .zipWithIndex()
                 .forEach(answI -> keyboardButtons.add(answI._2(), answI._1().text()));
         ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(List.of(keyboardButtons));
 
+        return keyboard;
+    }
+
+    public Optional<Message> sendAnswer(String text, long id) {
         SendMessage msg = new SendMessage();
         msg.setChatId(id);
-        msg.setText(quiz.question());
+        msg.setText(text);
         msg.enableMarkdown(true);
-        msg.setReplyMarkup(keyboard);
+        msg.setReplyMarkup(new ReplyKeyboardRemove());
 
         return execute(msg);
     }

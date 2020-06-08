@@ -8,6 +8,14 @@
     <artifactId>RaifQuizBot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <java-version>14</java-version>
+        <maven.compiler.compilerVersion>${java-version}</maven.compiler.compilerVersion>
+        <maven.compiler.source>${java-version}</maven.compiler.source>
+        <maven.compiler.target>${java-version}</maven.compiler.target>
+        <telegrambots.version>4.9</telegrambots.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -18,12 +26,17 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.9</version>
+            <version>${telegrambots.version}</version>
         </dependency>
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-abilities</artifactId>
-            <version>4.9</version>
+            <version>${telegrambots.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-chat-session-bot</artifactId>
+            <version>${telegrambots.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -51,14 +64,12 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.11.0</version>
+        </dependency>
     </dependencies>
-
-    <properties>
-        <java-version>14</java-version>
-        <maven.compiler.compilerVersion>${java-version}</maven.compiler.compilerVersion>
-        <maven.compiler.source>${java-version}</maven.compiler.source>
-        <maven.compiler.target>${java-version}</maven.compiler.target>
-    </properties>
 
     <build>
         <plugins>

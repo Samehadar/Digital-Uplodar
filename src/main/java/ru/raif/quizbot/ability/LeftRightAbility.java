@@ -1,5 +1,6 @@
 package ru.raif.quizbot.ability;
 
+import io.vavr.control.Try;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.telegram.abilitybots.api.db.DBContext;
@@ -53,7 +54,7 @@ public class LeftRightAbility implements AbilityExtension {
     }
 
     private Predicate<Update> messageIs(String msg) {
-        return upd -> upd.getMessage().getText().equalsIgnoreCase(msg);
+        return upd -> Try.of(() -> upd.getMessage().getText().equalsIgnoreCase(msg)).getOrElse(false);
     }
 
 }

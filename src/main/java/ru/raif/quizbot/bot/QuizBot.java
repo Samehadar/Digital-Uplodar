@@ -1,5 +1,6 @@
 package ru.raif.quizbot.bot;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
@@ -9,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.raif.quizbot.ability.LeftRightAbility;
 import ru.raif.quizbot.ability.PingPongAbility;
+import ru.raif.quizbot.ability.SendQuizAbility;
 import ru.raif.quizbot.ability.SilenceAbility;
 import ru.raif.quizbot.config.BotConfig;
 import ru.raif.quizbot.repository.QuizRepo;
@@ -25,7 +27,9 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 public class QuizBot extends AbilityBot {
 
     private Integer creatorId;
+    @Getter
     private QuizSender quizSender;
+    @Getter
     private QuizRepo quizRepo;
 
     public QuizBot(BotConfig config, QuizRepo quizRepo) {
@@ -47,19 +51,8 @@ public class QuizBot extends AbilityBot {
         return creatorId;
     }
 
-    public Ability sendQuiz() {
-        return Ability.builder()
-                .name("quiz")
-                .info("Return random quiz")
-                .locality(ALL)
-                .privacy(PUBLIC)
-                .action(ctx -> quizSender.sendQuiz(quizRepo.getRandomQuiz(), ctx.chatId()))
-//                .reply(update -> {
-//                    log.info("Received reply from the user: " + AbilityUtils.fullName(AbilityUtils.getUser(update)));
-//                    update.getCallbackQuery();
-//                    silent.send("I don't know the correct answer, I'm sorry :(", AbilityUtils.getChatId(update));
-//                }, MESSAGE, )
-                .build();
+    public AbilityExtension sendQuiz() {
+        return new SendQuizAbility(this::getQuizSender, this::getQuizRepo, db);
     }
 
     public AbilityExtension ignoreAnyoneExceptCreator() {
