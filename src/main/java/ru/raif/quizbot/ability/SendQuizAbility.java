@@ -24,7 +24,7 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 //не работает потому что библиотека сначала загружает все абилити, а потом продолжает инициализацию конструктора
 // таким образом у меня все параметры моего аьбилити, которых не было в конструкторе предка - нулы
 //@Slf4j - it doesnt work with records ((
-public record SendQuizAbility(Supplier<QuizSender> quizSender, Supplier<QuizRepo> quizRepo, DBContext db) implements AbilityExtension {
+public record SendQuizAbility(DBContext db, Supplier<QuizSender> quizSender, Supplier<QuizRepo> quizRepo) implements AbilityExtension {
 
     private static final String QUIZZES = "QUIZZES";
     private static final Logger log = LoggerFactory.getLogger(SendQuizAbility.class);

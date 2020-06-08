@@ -52,11 +52,11 @@ public class QuizBot extends AbilityBot {
     }
 
     public AbilityExtension sendQuiz() {
-        return new SendQuizAbility(this::getQuizSender, this::getQuizRepo, db);
+        return new SendQuizAbility(db, this::getQuizSender, this::getQuizRepo);
     }
 
     public AbilityExtension ignoreAnyoneExceptCreator() {
-        return new SilenceAbility(silent, this::creatorId);
+        return new SilenceAbility(db, silent, this::creatorId);
     }
 
     public AbilityExtension pingPong() {
