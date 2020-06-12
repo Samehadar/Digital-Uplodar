@@ -19,7 +19,7 @@ import static org.telegram.abilitybots.api.objects.Locality.USER;
 import static org.telegram.abilitybots.api.objects.Privacy.CREATOR;
 
 //trick to receive call-by-name behavior
-public record SilenceAbility(DBContext db, SilentSender silent, Supplier<Integer> getCreatorId) implements AbilityExtension {
+public record BouncerAbility(DBContext db, SilentSender silent, Supplier<Integer> getCreatorId) implements AbilityExtension {
 
     private static final String WAIT_WHITE_LIST = "WAIT_WHITE_LIST";
     private static final String WHITE_LIST = "WHITE_LIST";
@@ -61,7 +61,7 @@ public record SilenceAbility(DBContext db, SilentSender silent, Supplier<Integer
                                     },
                                     () -> {
                                         db.<String>getSet(WAIT_WHITE_LIST).add(ctx.arguments()[0]);
-                                        silent.send("User not found", AbilityUtils.getChatId(ctx.update()));
+                                        silent.send("User not found, but has been added in the 'wait' white list", AbilityUtils.getChatId(ctx.update()));
                                     }
                             );
                 }).build();
@@ -85,7 +85,14 @@ public record SilenceAbility(DBContext db, SilentSender silent, Supplier<Integer
                                         db.<String>getSet(WAIT_WHITE_LIST).remove(ctx.arguments()[0]);
                                         silent.send("User has been removed from white list", AbilityUtils.getChatId(ctx.update()));
                                     },
-                                    () -> silent.send("User not found", AbilityUtils.getChatId(ctx.update()))
+                                    () -> {
+                                        if (db.<String>getSet(WAIT_WHITE_LIST).contains(ctx.arguments()[0])) {
+                                            db.<String>getSet(WAIT_WHITE_LIST).remove(ctx.arguments()[0]);
+                                            silent.send("User has been removed from 'wait' white list", AbilityUtils.getChatId(ctx.update()));
+                                        } else {
+                                            silent.send("User not found", AbilityUtils.getChatId(ctx.update()));
+                                        }
+                                    }
                             );
                 }).build();
     }
@@ -104,8 +111,15 @@ public record SilenceAbility(DBContext db, SilentSender silent, Supplier<Integer
                                         .map(User::getUserName).map(AbilityUtils::addTag)
                                         .orElse("id:" + id)
                             )
-                            .collect(Collectors.joining("\n"));
-                    silent.send(whiteList.isBlank() ? "White list is empty" : whiteList, AbilityUtils.getChatId(ctx.update()));
+                            .collect(Collectors.toList());
+                    var waitWhiteList = db.<String>getSet(WAIT_WHITE_LIST);
+                    silent.send(
+                            whiteList.isEmpty() && waitWhiteList.isEmpty()
+                            ? "Wait white list and White list is empty"
+                            : whiteList.stream().collect(Collectors.joining("\n", "White list:\n", "\n")) + waitWhiteList.stream().collect(Collectors.joining("\n", "Wait white list:\n", "\n")),
+
+                            AbilityUtils.getChatId(ctx.update())
+                    );
                 }).build();
     }
 

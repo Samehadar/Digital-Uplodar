@@ -1,5 +1,6 @@
 package com.grimeoverhere.uploaderbot.bot;
 
+import com.grimeoverhere.uploaderbot.ability.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.abilitybots.api.bot.AbilityBot;
@@ -8,10 +9,6 @@ import org.telegram.abilitybots.api.util.AbilityExtension;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import com.grimeoverhere.uploaderbot.ability.LeftRightAbility;
-import com.grimeoverhere.uploaderbot.ability.PingPongAbility;
-import com.grimeoverhere.uploaderbot.ability.SendQuizAbility;
-import com.grimeoverhere.uploaderbot.ability.SilenceAbility;
 import com.grimeoverhere.uploaderbot.config.BotConfig;
 import com.grimeoverhere.uploaderbot.repository.QuizRepo;
 import com.grimeoverhere.uploaderbot.util.QuizSender;
@@ -23,8 +20,9 @@ import static org.telegram.abilitybots.api.objects.Flag.REPLY;
 import static org.telegram.abilitybots.api.objects.Locality.ALL;
 import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
+//todo:: добавить рандомное предложение от бота ответить еще раз, типа "Ой, что-то пошло не так, ответь еще раз (псс, овтет не верный, давай еще раз потихому)
 @Slf4j
-public class QuizBot extends AbilityBot {
+public class UploaderBot extends AbilityBot {
 
     private Integer creatorId;
     @Getter
@@ -32,14 +30,14 @@ public class QuizBot extends AbilityBot {
     @Getter
     private QuizRepo quizRepo;
 
-    public QuizBot(BotConfig config, QuizRepo quizRepo) {
+    public UploaderBot(BotConfig config, QuizRepo quizRepo) {
         super(config.getToken(), config.getUsername());
         this.creatorId = config.getCreatorId();
         this.quizSender = new QuizSender(sender);
         this.quizRepo = quizRepo;
     }
 
-    public QuizBot(BotConfig config, QuizRepo quizRepo, DefaultBotOptions botOptions) {
+    public UploaderBot(BotConfig config, QuizRepo quizRepo, DefaultBotOptions botOptions) {
         super(config.getToken(), config.getUsername(), botOptions);
         this.creatorId = config.getCreatorId();
         this.quizSender = new QuizSender(sender);
@@ -51,12 +49,12 @@ public class QuizBot extends AbilityBot {
         return creatorId;
     }
 
-    public AbilityExtension sendQuiz() {
-        return new SendQuizAbility(db, this::getQuizSender, this::getQuizRepo);
+    public AbilityExtension registration() {
+        return new AdministerBattleAbility(silent);
     }
 
     public AbilityExtension ignoreAnyoneExceptCreator() {
-        return new SilenceAbility(db, silent, this::creatorId);
+        return new BouncerAbility(db, silent, this::creatorId);
     }
 
     public AbilityExtension pingPong() {
@@ -65,17 +63,6 @@ public class QuizBot extends AbilityBot {
 
     public AbilityExtension goLeftGoRight() {
         return new LeftRightAbility(db, silent);
-    }
-
-    public Ability sayHelloWorld() {
-        return Ability
-                .builder()
-                .name("hello")
-                .info("says hello world!")
-                .locality(ALL)
-                .privacy(PUBLIC)
-                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
-                .build();
     }
 
     public Ability playWithMe() {

@@ -8,7 +8,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import com.grimeoverhere.uploaderbot.bot.QuizBot;
+import com.grimeoverhere.uploaderbot.bot.UploaderBot;
 import com.grimeoverhere.uploaderbot.config.BotConfig;
 import com.grimeoverhere.uploaderbot.config.ProxyConfig;
 import com.grimeoverhere.uploaderbot.util.AsciiArt;
@@ -42,13 +42,13 @@ public class Server {
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
-        QuizBot bot;
+        UploaderBot bot;
         //ffs it doesnt work through Optional.map flow... I gave up and wrote through IF ELSE
         if (config.getProxy() != null) {
             DefaultBotOptions dbo = generateBotOptionsWithProxy(config.getProxy());
-            bot = new QuizBot(config, quizRepo, dbo);
+            bot = new UploaderBot(config, quizRepo, dbo);
         } else {
-            bot = new QuizBot(config, quizRepo);
+            bot = new UploaderBot(config, quizRepo);
         }
 
 
