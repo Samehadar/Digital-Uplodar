@@ -14,6 +14,7 @@
         <maven.compiler.source>${java-version}</maven.compiler.source>
         <maven.compiler.target>${java-version}</maven.compiler.target>
         <telegrambots.version>4.9</telegrambots.version>
+        <microsoft-graph.version>1.7.1</microsoft-graph.version>
     </properties>
 
     <dependencies>
@@ -69,6 +70,23 @@
             <artifactId>jackson-core</artifactId>
             <version>2.11.0</version>
         </dependency>
+        <dependency>
+            <!-- https://docs.microsoft.com/en-us/graph/sdks/sdk-installation   -->
+            <!-- https://github.com/microsoftgraph/msgraph-sdk-java/tree/master -->
+            <groupId>com.microsoft.graph</groupId>
+            <artifactId>microsoft-graph</artifactId>
+            <version>${microsoft-graph.version}</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.graph</groupId>-->
+<!--            <artifactId>microsoft-graph-core</artifactId>-->
+<!--            <version>${microsoft-graph.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.graph</groupId>-->
+<!--            <artifactId>microsoft-graph-auth</artifactId>-->
+<!--            <version>${microsoft-graph.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
