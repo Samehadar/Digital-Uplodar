@@ -1,4 +1,4 @@
-package ru.raif.quizbot;
+package com.grimeoverhere.uploaderbot;
 
 import com.typesafe.config.ConfigBeanFactory;
 import com.typesafe.config.ConfigFactory;
@@ -8,24 +8,22 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.raif.quizbot.bot.QuizBot;
-import ru.raif.quizbot.config.BotConfig;
-import ru.raif.quizbot.config.ProxyConfig;
-import ru.raif.quizbot.model.Quiz;
-import ru.raif.quizbot.util.AsciiArt;
-import ru.raif.quizbot.repository.QuizRepo;
-import ru.raif.quizbot.repository.QuizRepoImpl;
+import com.grimeoverhere.uploaderbot.bot.QuizBot;
+import com.grimeoverhere.uploaderbot.config.BotConfig;
+import com.grimeoverhere.uploaderbot.config.ProxyConfig;
+import com.grimeoverhere.uploaderbot.util.AsciiArt;
+import com.grimeoverhere.uploaderbot.repository.QuizRepo;
+import com.grimeoverhere.uploaderbot.repository.QuizRepoImpl;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-import java.util.List;
 
 @Slf4j
 public class Server {
 
     public static void main(String[] args) {
-        log.info(AsciiArt.makeLogotype());
-        log.info("QuizBot is starting...");
+        log.info(AsciiArt.getLogotype());
+        log.info("Bot is starting...");
 
         log.info("Loading server configuration");
         BotConfig config = ConfigBeanFactory.create(ConfigFactory.load("bot.conf").getConfig("bot"), BotConfig.class);

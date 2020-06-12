@@ -1,4 +1,4 @@
-package ru.raif.quizbot.ability;
+package com.grimeoverhere.uploaderbot.ability;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +8,10 @@ import org.telegram.abilitybots.api.objects.Reply;
 import org.telegram.abilitybots.api.util.AbilityExtension;
 import org.telegram.abilitybots.api.util.AbilityUtils;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.raif.quizbot.model.Answer;
-import ru.raif.quizbot.model.Quiz;
-import ru.raif.quizbot.repository.QuizRepo;
-import ru.raif.quizbot.util.QuizSender;
+import com.grimeoverhere.uploaderbot.model.Answer;
+import com.grimeoverhere.uploaderbot.model.Quiz;
+import com.grimeoverhere.uploaderbot.repository.QuizRepo;
+import com.grimeoverhere.uploaderbot.util.QuizSender;
 
 import java.util.Map;
 import java.util.function.Predicate;

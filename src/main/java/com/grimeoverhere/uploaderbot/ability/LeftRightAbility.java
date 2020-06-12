@@ -1,4 +1,4 @@
-package ru.raif.quizbot.ability;
+package com.grimeoverhere.uploaderbot.ability;
 
 import io.vavr.control.Try;
 import lombok.NonNull;

@@ -1,4 +1,4 @@
-package ru.raif.quizbot.ability;
+package com.grimeoverhere.uploaderbot.ability;
 
 import org.telegram.abilitybots.api.db.DBContext;
 import org.telegram.abilitybots.api.objects.Ability;

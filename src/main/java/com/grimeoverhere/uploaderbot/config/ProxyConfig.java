@@ -1,4 +1,4 @@
-package ru.raif.quizbot.config;
+package com.grimeoverhere.uploaderbot.config;
 
 import com.typesafe.config.Optional;
 import lombok.*;

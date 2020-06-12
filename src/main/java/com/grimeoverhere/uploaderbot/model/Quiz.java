@@ -1,4 +1,4 @@
-package ru.raif.quizbot.model;
+package com.grimeoverhere.uploaderbot.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

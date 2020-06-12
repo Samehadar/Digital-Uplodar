@@ -1,4 +1,4 @@
-package ru.raif.quizbot.util;
+package com.grimeoverhere.uploaderbot.util;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;

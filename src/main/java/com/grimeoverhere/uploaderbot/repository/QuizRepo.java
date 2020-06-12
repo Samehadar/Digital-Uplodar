@@ -1,12 +1,12 @@
-package ru.raif.quizbot.repository;
+package com.grimeoverhere.uploaderbot.repository;
 
-import ru.raif.quizbot.model.Quiz;
+import com.grimeoverhere.uploaderbot.model.Quiz;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ru.raif.quizbot.model.Quiz.QuizLevel.*;
+import static com.grimeoverhere.uploaderbot.model.Quiz.QuizLevel.*;
 
 public interface QuizRepo {
 

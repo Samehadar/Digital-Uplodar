@@ -1,13 +1,13 @@
-package ru.raif.quizbot.repository;
+package com.grimeoverhere.uploaderbot.repository;
 
-import ru.raif.quizbot.model.Answer;
-import ru.raif.quizbot.model.Quiz;
+import com.grimeoverhere.uploaderbot.model.Answer;
+import com.grimeoverhere.uploaderbot.model.Quiz;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static ru.raif.quizbot.model.Quiz.QuizLevel.*;
+import static com.grimeoverhere.uploaderbot.model.Quiz.QuizLevel.*;
 
 public class QuizRepoImpl implements QuizRepo {
 

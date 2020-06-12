@@ -1,4 +1,4 @@
-package ru.raif.quizbot.bot;
+package com.grimeoverhere.uploaderbot.bot;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,13 +8,13 @@ import org.telegram.abilitybots.api.util.AbilityExtension;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.raif.quizbot.ability.LeftRightAbility;
-import ru.raif.quizbot.ability.PingPongAbility;
-import ru.raif.quizbot.ability.SendQuizAbility;
-import ru.raif.quizbot.ability.SilenceAbility;
-import ru.raif.quizbot.config.BotConfig;
-import ru.raif.quizbot.repository.QuizRepo;
-import ru.raif.quizbot.util.QuizSender;
+import com.grimeoverhere.uploaderbot.ability.LeftRightAbility;
+import com.grimeoverhere.uploaderbot.ability.PingPongAbility;
+import com.grimeoverhere.uploaderbot.ability.SendQuizAbility;
+import com.grimeoverhere.uploaderbot.ability.SilenceAbility;
+import com.grimeoverhere.uploaderbot.config.BotConfig;
+import com.grimeoverhere.uploaderbot.repository.QuizRepo;
+import com.grimeoverhere.uploaderbot.util.QuizSender;
 
 import java.util.function.Predicate;
 
